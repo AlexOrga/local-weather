@@ -1,4 +1,5 @@
 const apiKeys = require('./apiKeys');
+const dom = require('./dom');
 
 const weatherKey = '';
 
@@ -14,14 +15,21 @@ const searchOpenWeather = (zipCode) => {
       })
       .fail((err) => {
         reject(err);
-    })
+      });
   });
 };
 
-const showResults = () => {
-
+const showResults = (zipEntered) => {
+  searchOpenWeather(zipEntered)
+    .then((result) => {
+      dom.domString(result);
+    })
+    .catch((err) => {
+      console.error('Oh no! There was an error', err);
+    });
 };
 
 module.exports = {
   setKey,
+  showResults,
 };
