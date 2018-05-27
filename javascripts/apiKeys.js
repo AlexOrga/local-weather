@@ -1,4 +1,5 @@
 const openWeather = require('./openWeather');
+const events = require('./events');
 
 const apiKeys = () => {
   return new Promise((resolve, reject) => {
@@ -16,6 +17,7 @@ const getKeys = () => {
   apiKeys()
     .then((results) => {
       openWeather.setKey(results.openWeather.apiKey);
+      events.initiateSearch();
     })
     .catch((err) => {
       console.error('Oops there was an error', err);

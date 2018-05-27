@@ -1,15 +1,14 @@
-const apiKeys = require('./apiKeys');
 const dom = require('./dom');
 
-const weatherKey = '';
+let weatherKey = '';
 
 const setKey = (key) => {
-  weatherKey = apiKeys.getKeys();
+  weatherKey = key;
 };
 
 const searchOpenWeather = (zipCode) => {
   return new Promise((resolve, reject) => {
-    $.ajax(`api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${weatherKey}&units=imperial`)
+    $.ajax(`https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&APPID=${weatherKey}&units=imperial`)
       .done((result) => {
         resolve(result);
       })
@@ -19,8 +18,8 @@ const searchOpenWeather = (zipCode) => {
   });
 };
 
-const showResults = (zipEntered) => {
-  searchOpenWeather(zipEntered)
+const showResults = (zipCodeEntered) => {
+  searchOpenWeather(zipCodeEntered)
     .then((result) => {
       dom.domString(result);
     })
@@ -32,4 +31,5 @@ const showResults = (zipEntered) => {
 module.exports = {
   setKey,
   showResults,
+  weatherKey,
 };
