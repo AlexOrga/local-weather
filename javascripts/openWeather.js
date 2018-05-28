@@ -28,7 +28,7 @@ const showSingleResults = (zipCodeEntered) => {
     });
 };
 
-const searchOpenWeatherFiveDay = (zipCode) => {
+const searchOpenWeatherMultiDay = (zipCode) => {
   return new Promise((resolve, reject) => {
     $.ajax(`https://api.openweathermap.org/data/2.5/forecast?zip=${zipCode},us&APPID=${weatherKey}&units=imperial`)
       .done((result) => {
@@ -41,9 +41,19 @@ const searchOpenWeatherFiveDay = (zipCode) => {
 };
 
 const showFiveDayResults = (zipCodeEntered) => {
-  searchOpenWeatherFiveDay(zipCodeEntered)
+  searchOpenWeatherMultiDay(zipCodeEntered)
     .then((result) => {
       dom.domStringFiveDay(result);
+    })
+    .catch((err) => {
+      console.error('Oops, big boo-boo', err);
+    });
+};
+
+const showThreeDayResults = (zipCodeEntered) => {
+  searchOpenWeatherMultiDay(zipCodeEntered)
+    .then((result) => {
+      dom.domStringThreeDay(result);
     })
     .catch((err) => {
       console.error('Oops, big boo-boo', err);
@@ -54,4 +64,5 @@ module.exports = {
   setKey,
   showSingleResults,
   showFiveDayResults,
+  showThreeDayResults,
 };

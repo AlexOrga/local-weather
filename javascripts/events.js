@@ -32,9 +32,16 @@ const fiveDayForecastBtn = () => {
   });
 };
 
+const threeDayForecastBtn = () => {
+  $('#threeDayBtn').click(() => {
+    openWeather.showThreeDayResults(zipCode);
+  });
+};
+
 const forecastOptionEvents = () => {
   currentWeatherBtn();
   fiveDayForecastBtn();
+  threeDayForecastBtn();
 };
 
 const initiateSearch = () => {
