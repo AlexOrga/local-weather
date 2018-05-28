@@ -1,0 +1,17 @@
+#weather {
+  margin-top: 50px;
+}
+
+#changeDayButtons {
+  display: block;
+}
+
+#currentForecast {
+  display: block;
+  margin-top: 25px;
+}
+
+#domIcon {
+  width: 100px;
+  height: 100px;
+}
