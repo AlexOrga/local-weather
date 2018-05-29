@@ -1,15 +1,14 @@
-const apiKeys = require('./apiKeys');
 const dom = require('./dom');
 
-const weatherKey = '';
+let weatherKey = '';
 
 const setKey = (key) => {
-  weatherKey = apiKeys.getKeys();
+  weatherKey = key;
 };
 
-const searchOpenWeather = (zipCode) => {
+const searchOpenWeatherCurrentDay = (zipCode) => {
   return new Promise((resolve, reject) => {
-    $.ajax(`api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${weatherKey}&units=imperial`)
+    $.ajax(`https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&APPID=${weatherKey}&units=imperial`)
       .done((result) => {
         resolve(result);
       })
@@ -19,8 +18,8 @@ const searchOpenWeather = (zipCode) => {
   });
 };
 
-const showResults = (zipEntered) => {
-  searchOpenWeather(zipEntered)
+const showSingleResults = (zipCodeEntered) => {
+  searchOpenWeatherCurrentDay(zipCodeEntered)
     .then((result) => {
       dom.domString(result);
     })
@@ -29,7 +28,41 @@ const showResults = (zipEntered) => {
     });
 };
 
+const searchOpenWeatherMultiDay = (zipCode) => {
+  return new Promise((resolve, reject) => {
+    $.ajax(`https://api.openweathermap.org/data/2.5/forecast?zip=${zipCode},us&APPID=${weatherKey}&units=imperial`)
+      .done((result) => {
+        resolve(result);
+      })
+      .fail((err) => {
+        reject('Oops there was a problem!', err);
+      });
+  });
+};
+
+const showFiveDayResults = (zipCodeEntered) => {
+  searchOpenWeatherMultiDay(zipCodeEntered)
+    .then((result) => {
+      dom.domStringFiveDay(result);
+    })
+    .catch((err) => {
+      console.error('Oops, big boo-boo', err);
+    });
+};
+
+const showThreeDayResults = (zipCodeEntered) => {
+  searchOpenWeatherMultiDay(zipCodeEntered)
+    .then((result) => {
+      dom.domStringThreeDay(result);
+    })
+    .catch((err) => {
+      console.error('Oops, big boo-boo', err);
+    });
+};
+
 module.exports = {
   setKey,
-  showResults,
+  showSingleResults,
+  showFiveDayResults,
+  showThreeDayResults,
 };

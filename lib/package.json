@@ -14,5 +14,8 @@
     "grunt-contrib-watch": "^1.1.0",
     "gruntify-eslint": "^4.0.0",
     "matchdep": "^2.0.0"
+  },
+  "dependencies": {
+    "moment": "^2.22.1"
   }
 }
