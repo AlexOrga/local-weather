@@ -8,23 +8,112 @@
   <link rel="stylesheet" href="./main.css">
   <title>Local Weather</title>
 </head>
+
 <body class="text-center">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img alt="Brand" src="...">
+        </a>
+      </div>
+      <ul id="signout-btn" class="nav navbar-nav navbar-right hide">
+        <li><a href="#">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="authscreen">
+    <div id="signin-form">
+      <h1>Sign In</h1>
+      <h3>With Your Existing Account</h3>
 
-  <div class="input-group col-sm-6 col-sm-offset-3">
-    <span class="input-group-addon glyphicon glyphicon-search" id="basic-addon1"></span>
-    <input type="text" id="input" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+      <form class="form-horizontal">
+        <div id="signin-error" class="alert alert-danger hide" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span id="signin-error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-sm-2 col-sm-offset-2 control-label">Email</label>
+          <div class="col-sm-4">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="col-sm-2 col-sm-offset-2 control-label">Password</label>
+          <div class="col-sm-4">
+            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <button id="signin-btn" type="submit" class="btn btn-default">Sign in</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-2">
+            <div class="checkbox">
+              <p>Don't have an account? <a id="register-link" href=#>Sign Up Now!</a></p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="registration-form" class="hide">
+      <h1>Registration</h1>
+
+      <form class="form-horizontal">
+        <div id="register-error" class="alert alert-danger hide" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span id="register-error-msg"></span>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-sm-2 col-sm-offset-2 control-label">Email</label>
+          <div class="col-sm-4">
+            <input type="email" class="form-control" id="register-email" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="col-sm-2 col-sm-offset-2 control-label">Password</label>
+          <div class="col-sm-4">
+            <input type="password" class="form-control" id="register-password" placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <button id="register-btn" type="submit" class="btn btn-default">Register Now!</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-2">
+            <div class="checkbox">
+              <p>Already have an account? <a id="signin-link" href=#>Sign In Here!</a></p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <button class="btn btn-default" type="submit" id="submitBtn">Submit</button>
 
-  <div id="changeDayButtons">`;
-      <button id="currentBtn" class="btn btn-default col-md-2 col-md-offset-2">Current Weather</button>
-      <button id="fiveDayBtn" class="btn btn-default col-md-2 col-md-offset-1">5 Day Forecast</button>
-      <button id="threeDayBtn" class="btn btn-default col-md-2 col-md-offset-1">3 Day Forecast</button>
+  <div id="application" class="hide">
+    <div class="input-group col-sm-6 col-sm-offset-3">
+      <span class="input-group-addon glyphicon glyphicon-search" id="basic-addon1"></span>
+      <input type="text" id="input" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+    </div>
+    <button class="btn btn-default" type="submit" id="submitBtn">Submit</button>
+    <button class="btn btn-default savedWeather">See Saved Forecasts</button>
+
+    <div id="changeDayButtons">;
+        <button id="currentBtn" class="btn btn-default col-md-2 col-md-offset-2">Current Weather</button>
+        <button id="fiveDayBtn" class="btn btn-default col-md-2 col-md-offset-1">5 Day Forecast</button>
+        <button id="threeDayBtn" class="btn btn-default col-md-2 col-md-offset-1">3 Day Forecast</button>
+    </div>
+
+    <div id="weather"></div>
+    <div id="multiDay"></div>
   </div>
-
-  <div id="weather"></div>
-  <div id="multiDay"></div>
-
   <!-- <script src="lib/node_modules/moment/moment.js"></script> -->
   <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"

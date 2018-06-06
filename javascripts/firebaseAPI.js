@@ -20,7 +20,30 @@ const addForecastToSaved = (newForecast) => {
   });
 };
 
+const getSavedWeather = () => {
+  return new Promise((resolve, reject) => {
+    const allWeatherArray = [];
+    $.ajax({
+      method: 'GET',
+      url: `${firebaseConfig.databaseURL}/forecasts.json`,
+    })
+      .done((allForecastObj) => {
+        if (allForecastObj !== null) {
+          Object.keys(allForecastObj).forEach((key) => {
+            allForecastObj[key].id = key;
+            allWeatherArray.push(allForecastObj[key]);
+          });
+        }
+        resolve(allWeatherArray);
+      })
+      .fail((error) => {
+        reject(error);
+      });
+  });
+};
+
 module.exports = {
   addForecastToSaved,
   setConfig,
+  getSavedWeather,
 };

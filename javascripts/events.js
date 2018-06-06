@@ -1,5 +1,6 @@
 const openWeather = require('./openWeather');
 const firebaseAPI = require('./firebaseAPI');
+const dom = require('./dom');
 
 let inputValue = '';
 let zipCode = '';
@@ -54,9 +55,12 @@ const forecastOptionEvents = () => {
   currentWeatherBtn();
   fiveDayForecastBtn();
   threeDayForecastBtn();
+  saveOneDayForecastEvent();
+  saveFiveDayForecastEvent();
+  saveThreeDayForecastEvent();
 };
 
-const saveForecastEvent = () => {
+const saveOneDayForecastEvent = () => {
   $(document).on('click', '.saveBtn', (e) => {
     const weatherCardToAdd = $(e.target).closest('.weatherCard');
     const weatherToAdd = {
@@ -77,10 +81,87 @@ const saveForecastEvent = () => {
   });
 };
 
+const saveFiveDayForecastEvent = () => {
+
+};
+
+const saveThreeDayForecastEvent = () => {
+
+};
+
+const showSavedForecasts = () => {
+  $(document).on('click', '.savedWeather', () => {
+    firebaseAPI.getSavedWeather()
+      .then((forecastArray) => {
+        dom.savedForecastsDom(forecastArray);
+      })
+      .catch((err) => {
+        console.error('error displaying saved forecasts' ,err);
+      });
+  });
+};
+
+const authEvents = () => {
+  $('#signin-btn').click((e) => {
+    e.preventDefault();
+    const email = $('#inputEmail').val();
+    const password = $('#inputPassword').val();
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        $('#signin-form').addClass('hide');
+        $('#application').removeClass('hide');
+        $('#signout-btn').removeClass('hide');
+      })
+      .catch((error) => {
+        $('#signin-error-msg').text(error.message);
+        $('#signin-error').removeClass('hide');
+        console.error(error.message);
+      });
+  });
+
+  $('#register-btn').click(() => {
+    const email = $('#register-email').val();
+    const password = $('#register-password').val();
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .catch((error) => {
+        // Handle Errors here.
+        $('#register-error-msg').text(error.message);
+        $('#register-error').removeClass('hide');
+        const errorMessage = error.message;
+        console.error('Error registering', errorMessage);
+      });
+  });
+
+  $('#register-link').click(() => {
+    $('#signin-form').addClass('hide');
+    $('#registration-form').removeClass('hide');
+  });
+
+  $('#signin-link').click(() => {
+    $('#signin-form').removeClass('hide');
+    $('#registration-form').addClass('hide');
+  });
+
+  $('#signout-btn').click(() => {
+    firebase.auth().signOut()
+      .then(() => {
+        $('#signout-btn').addClass('hide');
+        $('#application').addClass('hide');
+        $('#signin-form').removeClass('hide');
+        $('#inputEmail').val('');
+        $('#inputPassword').val('');
+      })
+      .catch((error) => {
+        console.error('Error logging out', error);
+      });
+  });
+};
+
 const initiateSearch = () => {
   enterKeyPress();
   submitButton();
-  saveForecastEvent();
+  showSavedForecasts();
+  authEvents();
 };
 
 module.exports = {
