@@ -1,5 +1,7 @@
 const openWeather = require('./openWeather');
 const events = require('./events');
+const firebaseAPI = require('./firebaseAPI');
+const {checkLoginStatus,} = require('./auth');
 
 const apiKeys = () => {
   return new Promise((resolve, reject) => {
@@ -18,6 +20,9 @@ const getKeys = () => {
     .then((results) => {
       openWeather.setKey(results.openWeather.apiKey);
       events.initiateSearch();
+      firebaseAPI.setConfig(results.firebase);
+      firebase.initializeApp(results.firebase);
+      checkLoginStatus();
     })
     .catch((err) => {
       console.error('Oops there was an error', err);

@@ -1,0 +1,13 @@
+{
+    "main": {
+        "pressure": 1009,
+        "temp": 70.92
+    },
+    "weather": {
+        "icon": "10n",
+        "main": "Rain"
+    },
+    "wind": {
+        "speed": 5.82
+    }
+}
