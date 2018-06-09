@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" type="image/png" href="http://freepngimg.com/download/weather/23539-3-weather-transparent-image.png"/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="./main.css">
   <title>Local Weather</title>
@@ -14,11 +15,12 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">
-          <img alt="Brand" src="...">
+          <img alt="Brand" src="http://www.userlogos.org/files/logos/Brentc/localhost_logo.png">
         </a>
       </div>
-      <ul id="signout-btn" class="nav navbar-nav navbar-right hide">
-        <li><a href="#">Log Out</a></li>
+      <ul id="nav-links" class="nav navbar-nav navbar-right hide">
+        <li id="savedWeather"><a href="#">Saved Forecasts</a></li>
+        <li id="signout-btn"><a href="#">Log Out</a></li>
       </ul>
     </div>
   </nav>
@@ -36,13 +38,13 @@
         <div class="form-group">
           <label for="inputEmail" class="col-sm-2 col-sm-offset-2 control-label">Email</label>
           <div class="col-sm-4">
-            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+            <input value="a.orga@icloud.com" type="email" class="form-control" id="inputEmail" placeholder="Email">
           </div>
         </div>
         <div class="form-group">
           <label for="inputPassword" class="col-sm-2 col-sm-offset-2 control-label">Password</label>
           <div class="col-sm-4">
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+            <input value="a.orga" type="password" class="form-control" id="inputPassword" placeholder="Password">
           </div>
         </div>
         <div class="form-group">
@@ -103,7 +105,6 @@
       <input type="text" id="input" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
     </div>
     <button class="btn btn-default" type="submit" id="submitBtn">Submit</button>
-    <button class="btn btn-default savedWeather">See Saved Forecasts</button>
 
     <div id="changeDayButtons">;
         <button id="currentBtn" class="btn btn-default col-md-2 col-md-offset-2">Current Weather</button>

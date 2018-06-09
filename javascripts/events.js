@@ -7,9 +7,11 @@ let zipCode = '';
 
 const enterKeyPress = () => {
   $(document).keypress((e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && $('#signout-btn').is(':visible')) {
       inputValue = $('#input').val();
       if (inputValue.length === 5) {
+        $('#weather').html('');
+        $('#multiDay').html('');
         zipCode = inputValue;
         openWeather.showSingleResults(zipCode);
         forecastOptionEvents();
@@ -24,6 +26,8 @@ const submitButton = () => {
   $('#submitBtn').click(() => {
     inputValue = $('#input').val();
     if (inputValue.length === 5) {
+      $('#weather').html('');
+      $('#multiDay').html('');
       zipCode = inputValue;
       openWeather.showSingleResults(zipCode);
       forecastOptionEvents();
@@ -35,6 +39,7 @@ const submitButton = () => {
 
 const currentWeatherBtn = () => {
   $('#currentBtn').click(() => {
+    $('#multiDay').html('');
     openWeather.showSingleResults(zipCode);
   });
 };
@@ -51,20 +56,11 @@ const threeDayForecastBtn = () => {
   });
 };
 
-const forecastOptionEvents = () => {
-  currentWeatherBtn();
-  fiveDayForecastBtn();
-  threeDayForecastBtn();
-  saveOneDayForecastEvent();
-  saveFiveDayForecastEvent();
-  saveThreeDayForecastEvent();
-};
-
 const saveOneDayForecastEvent = () => {
-  $(document).on('click', '.saveBtn', (e) => {
+  $(document).on('click', '.saveBtnOneDay', (e) => {
     const weatherCardToAdd = $(e.target).closest('.weatherCard');
     const weatherToAdd = {
-      name: weatherCardToAdd.find('.city-name').data(name),
+      name: weatherCardToAdd.find('.city-name').data('name'),
       weather: {
         main: weatherCardToAdd.find('.city-description').data('description'),
         icon: weatherCardToAdd.find('.city-image').data('image'),
@@ -81,24 +77,63 @@ const saveOneDayForecastEvent = () => {
   });
 };
 
-const saveFiveDayForecastEvent = () => {
-
+const saveMultiDayForecastEvent = () => {
+  $(document).on('click', '.saveBtnMultiDay', (e) => {
+    const weatherCardToAdd = $(e.target).closest('.weatherCard');
+    const weatherToAdd = {
+      name: weatherCardToAdd.find('.city-timeStamp').data('name'),
+      weather: {
+        main: weatherCardToAdd.find('.city-description').data('description'),
+        icon: weatherCardToAdd.find('.city-image').data('image'),
+      },
+      main: {
+        temp: weatherCardToAdd.find('.city-temp').data('temp'),
+        pressure: weatherCardToAdd.find('.city-pressure').data('pressure'),
+      },
+      wind: {
+        speed: weatherCardToAdd.find('.city-windspeed').data('wind'),
+      },
+    };
+    firebaseAPI.addForecastToSaved(weatherToAdd);
+  });
 };
 
-const saveThreeDayForecastEvent = () => {
-
-};
-
-const showSavedForecasts = () => {
-  $(document).on('click', '.savedWeather', () => {
-    firebaseAPI.getSavedWeather()
-      .then((forecastArray) => {
-        dom.savedForecastsDom(forecastArray);
+const deleteSavedForecastEvent = () => {
+  $(document).on('click', '.deleteSavedForecastBtn', (e) => {
+    const weatherCardToDelete = $(e.target).closest('.savedForecastCard').data('firebaseId');
+    firebaseAPI.deleteForecastFromDb(weatherCardToDelete)
+      .then(() => {
+        getSavedForecasts();
       })
-      .catch((err) => {
-        console.error('error displaying saved forecasts' ,err);
+      .catch((error) => {
+        console.error('Error deleting saved forecast', error);
       });
   });
+};
+
+const getSavedForecasts = () => {
+  firebaseAPI.getSavedWeather()
+    .then((forecastArray) => {
+      dom.savedForecastsDom(forecastArray);
+      deleteSavedForecastEvent();
+    })
+    .catch((err) => {
+      console.error('error displaying saved forecasts' ,err);
+    });
+};
+
+const showSavedForecastsBtnEvent = () => {
+  $(document).on('click', '#savedWeather', () => {
+    getSavedForecasts();
+  });
+};
+
+const forecastOptionEvents = () => {
+  currentWeatherBtn();
+  fiveDayForecastBtn();
+  threeDayForecastBtn();
+  saveOneDayForecastEvent();
+  saveMultiDayForecastEvent();
 };
 
 const authEvents = () => {
@@ -110,7 +145,7 @@ const authEvents = () => {
       .then((user) => {
         $('#signin-form').addClass('hide');
         $('#application').removeClass('hide');
-        $('#signout-btn').removeClass('hide');
+        $('#nav-links').removeClass('hide');
       })
       .catch((error) => {
         $('#signin-error-msg').text(error.message);
@@ -123,6 +158,12 @@ const authEvents = () => {
     const email = $('#register-email').val();
     const password = $('#register-password').val();
     firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        // firebase.auth().signInWithEmailAndPassword(email, password);
+        $('#registration-form').addClass('hide');
+        $('#application').removeClass('hide');
+        $('#nav-links').removeClass('hide');
+      })
       .catch((error) => {
         // Handle Errors here.
         $('#register-error-msg').text(error.message);
@@ -145,11 +186,14 @@ const authEvents = () => {
   $('#signout-btn').click(() => {
     firebase.auth().signOut()
       .then(() => {
-        $('#signout-btn').addClass('hide');
+        $('#nav-links').addClass('hide');
         $('#application').addClass('hide');
         $('#signin-form').removeClass('hide');
         $('#inputEmail').val('');
         $('#inputPassword').val('');
+        $('#weather').html('');
+        $('#multiDay').html('');
+        $('#input').val('');
       })
       .catch((error) => {
         console.error('Error logging out', error);
@@ -160,7 +204,7 @@ const authEvents = () => {
 const initiateSearch = () => {
   enterKeyPress();
   submitButton();
-  showSavedForecasts();
+  showSavedForecastsBtnEvent();
   authEvents();
 };
 
