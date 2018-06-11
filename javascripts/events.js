@@ -72,6 +72,7 @@ const saveOneDayForecastEvent = () => {
       wind: {
         speed: weatherCardToAdd.find('.city-windspeed').data('wind'),
       },
+      isScary: weatherCardToAdd.find('.scaryCheckBox').is(':checked') ? 'true' : 'false',
     };
     firebaseAPI.addForecastToSaved(weatherToAdd);
   });
@@ -93,6 +94,7 @@ const saveMultiDayForecastEvent = () => {
       wind: {
         speed: weatherCardToAdd.find('.city-windspeed').data('wind'),
       },
+      isScary: weatherCardToAdd.find('.scaryCheckBox').is(':checked') ? 'true' : 'false',
     };
     firebaseAPI.addForecastToSaved(weatherToAdd);
   });
@@ -116,6 +118,7 @@ const getSavedForecasts = () => {
     .then((forecastArray) => {
       dom.savedForecastsDom(forecastArray);
       deleteSavedForecastEvent();
+      updateScaryWeatherInDb();
     })
     .catch((err) => {
       console.error('error displaying saved forecasts' ,err);
@@ -125,6 +128,101 @@ const getSavedForecasts = () => {
 const showSavedForecastsBtnEvent = () => {
   $(document).on('click', '#savedWeather', () => {
     getSavedForecasts();
+  });
+};
+
+const scaryWeatherEvent = () => {
+  $(document).on('change', '.scaryCheckBox', (e) => {
+    if ($(e.target).is(':checked')) {
+      $(e.target).closest('.weatherCard').addClass('scary');
+    } else {
+      $(e.target).closest('.weatherCard').removeClass('scary');
+    }
+  });
+};
+
+// const updateSavedForecastBoolean = (boolean) => {
+//   const weatherToUpdateID = $(e.target).closest('.savedForecastCard').data(firebaseId);
+//   const weatherToUpdateCard = $(e.target).closest('.savedForecastCard');
+//   const updatedWeather = {
+//     main: {
+//       pressure: weatherToUpdateCard.find('.pressure').text(),
+//       temp: weatherToUpdateCard.find('.temp').text(),
+//     },
+//     weather: {
+//       icon: weatherToUpdateCard.find('.image').data('image'),
+//       main: weatherToUpdateCard.find('.description').text(),
+//     },
+//     wind: {
+//       speed: weatherToUpdateCard.find('.wind').text(),
+//     },
+//     isScary: boolean,
+//   };
+
+//   firebaseAPI.updateScaryWeatherInDb(updatedWeather, weatherToUpdateID)
+//     .then(() => {
+//       getSavedForecasts();
+//     })
+//     .catch((error) => {
+//       console.error('Error when updating firebase', error);
+//     });
+// };
+
+const updateScaryWeatherInDb = () => {
+  $(document).on('change', '.scaryCheckBox', (e) => {
+    if ($(e.target).is(':checked')) {
+      const weatherToUpdateID = $(e.target).closest('.savedForecastCard').data('firebaseId');
+      const weatherToUpdateCard = $(e.target).closest('.savedForecastCard');
+      const updatedWeather = {
+        name: weatherToUpdateCard.find('.name').data('name'),
+        weather: {
+          main: weatherToUpdateCard.find('.description').data('description'),
+          icon: weatherToUpdateCard.find('.image').data('image'),
+        },
+        main: {
+          temp: weatherToUpdateCard.find('.temp').data('temp'),
+          pressure: weatherToUpdateCard.find('.pressure').data('pressure'),
+        },
+        wind: {
+          speed: weatherToUpdateCard.find('.wind').data('wind'),
+        },
+        isScary: 'true',
+      };
+
+      firebaseAPI.updateScaryWeatherInDb(updatedWeather, weatherToUpdateID)
+        .then(() => {
+          getSavedForecasts();
+        })
+        .catch((error) => {
+          console.error('Error when updating firebase', error);
+        });
+    } else {
+      const weatherToUpdateID = $(e.target).closest('.savedForecastCard').data('firebaseId');
+      const weatherToUpdateCard = $(e.target).closest('.savedForecastCard');
+      const updatedWeather = {
+        name: weatherToUpdateCard.find('.name').data('name'),
+        weather: {
+          main: weatherToUpdateCard.find('.description').data('description'),
+          icon: weatherToUpdateCard.find('.image').data('image'),
+        },
+        main: {
+          temp: weatherToUpdateCard.find('.temp').data('temp'),
+          pressure: weatherToUpdateCard.find('.pressure').data('pressure'),
+        },
+        wind: {
+          speed: weatherToUpdateCard.find('.wind').data('wind'),
+        },
+        isScary: 'false',
+      };
+
+      firebaseAPI.updateScaryWeatherInDb(updatedWeather, weatherToUpdateID)
+        .then(() => {
+          getSavedForecasts();
+        })
+        .catch((error) => {
+          console.error('Error when updating firebase', error);
+        });
+    }
   });
 };
 
@@ -206,6 +304,7 @@ const initiateSearch = () => {
   submitButton();
   showSavedForecastsBtnEvent();
   authEvents();
+  scaryWeatherEvent();
 };
 
 module.exports = {
