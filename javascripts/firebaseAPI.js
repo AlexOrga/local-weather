@@ -41,6 +41,23 @@ const deleteForecastFromDb = (movieId) => {
   });
 };
 
+const updateScaryWeatherInDb = (updatedForecast, forecastID) => {
+  updatedForecast.uid = uid;
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      method: 'PUT',
+      url: `${firebaseConfig.databaseURL}/forecasts/${forecastID}.json`,
+      data: JSON.stringify(updatedForecast),
+    })
+      .done((modifiedForecast) => {
+        resolve(modifiedForecast);
+      })
+      .fail((error) => {
+        reject(error);
+      });
+  });
+};
+
 const getSavedWeather = () => {
   return new Promise((resolve, reject) => {
     const allWeatherArray = [];
@@ -64,9 +81,10 @@ const getSavedWeather = () => {
 };
 
 module.exports = {
+  setConfig,
+  setUID,
   addForecastToSaved,
   deleteForecastFromDb,
-  setConfig,
+  updateScaryWeatherInDb,
   getSavedWeather,
-  setUID,
 };
