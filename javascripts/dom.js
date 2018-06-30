@@ -15,7 +15,7 @@ const domString = (weatherToday) => {
   const iconUrl = `http://openweathermap.org/img/w/${iconCode}.png`;
   const pressureToIn = (weatherToday.main.pressure * 0.02953).toFixed(2);
   let domString = '';
-  domString +=  `<div class="weatherCard" id="currentWeather">`;
+  domString +=  `<div class="weatherCard thumbnail col-sm-3 col-sm-offset-5" id="currentWeather">`;
   domString +=    `<h1 class="city-name" data-name="${weatherToday.name}">${weatherToday.name}</h1>`;
   domString +=    `<h2>Today</h2>`;
   domString +=    `<img id="domIcon" class="city-image" data-image="${weatherToday.weather[0].icon}" src="${iconUrl}">`;
@@ -97,7 +97,7 @@ const savedForecastsDom = (savedWeatherArray) => {
     const iconCode = weather.weather.icon;
     const iconUrl = `http://openweathermap.org/img/w/${iconCode}.png`;
     const pressureToIn = (weather.main.pressure * 0.02953).toFixed(2);
-    domString +=  `<div class="col-md-4 savedForecastCard ${weather.isScary === 'true' ? 'scary' : ''}" data-firebase-id="${weather.id}">`;
+    domString +=  `<div class="thumbnail col-md-4 savedForecastCard ${weather.isScary === 'true' ? 'scary' : ''}" data-firebase-id="${weather.id}">`;
     // domString +=     `<h5>${index}</h5>`;
     domString +=     `<h3 class="name" data-name="${weather.name}">${weather.name}</h3>`;
     domString +=     `<img class="image" src="${iconUrl}" data-image="${weather.weather.icon}">`;
