@@ -6,6 +6,11 @@ body {
   background-color: #41B3A3;
 }
 
+.navbar-header {
+  color: white;
+  margin-top: 5px;
+}
+
 #nav-links a {
   color: white;
 }
@@ -40,4 +45,10 @@ body {
 .scary {
   background-color: tomato;
   color: white;
+}
+
+.thumbnail {
+  width: 30%;
+  margin-left: 28px;
+  margin-right: 28px;
 }
